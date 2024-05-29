@@ -1,0 +1,35 @@
+.flex {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.center {
+    flex: 1 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.house {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.bookingButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .bookingButton:hover {
+    background-color: #0056b3;
+  }
+  
