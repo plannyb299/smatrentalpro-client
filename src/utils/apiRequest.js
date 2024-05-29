@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiRequest = axios.create({
-  baseURL: "http://localhost:9090/api/v1"
+  baseURL: "http://54.204.202.15:9090/api/v1"
 });
 
 apiRequest.interceptors.request.use(
@@ -14,7 +14,7 @@ apiRequest.interceptors.request.use(
     const token = localStorage.getItem('access_token');
     console.log(token)
     if (token) {
-      console.log('Setting Authorization header:', token); // Debug log
+      console.log('Setting Authorization header:', token); 
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
