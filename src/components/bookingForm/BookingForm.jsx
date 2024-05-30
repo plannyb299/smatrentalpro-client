@@ -1,14 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import apiRequest from "../../utils/apiRequest";
 import styles from "./BookingForm.module.scss";
+import { AuthContext } from "../../context/AuthContext";
 
-const BookingForm = ({ propertyId }) => {
+const BookingForm = () => {
+  const { propertyId } = useParams();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
   const [bookingData, setBookingData] = useState({
-    name: "",
-    email: "",
-    checkInDate: "",
-    checkOutDate: ""
+    bookedHomeId: propertyId,
+    bookedDate: "",
+    leaveDate: "",
+    userIdBooked: user ? user.user_id : null,
+    userNameBooked: user ? user.username : "",
+    hostReviewStars: 0,
+    hostReviewDescription: "",
+    homeReviewStars: 0,
+    homeReviewDescription: ""
   });
+
+  useEffect(() => {
+    if (user) {
+      setBookingData((prevData) => ({
+        ...prevData,
+        userIdBooked: user.user_id,
+        userNameBooked: user.username
+      }));
+    }
+  }, [user]);
+
   const [bookingError, setBookingError] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
@@ -26,8 +54,7 @@ const BookingForm = ({ propertyId }) => {
     setBookingSuccess(false);
 
     try {
-      await apiRequest.post(`/bookings`, {
-        propertyId: propertyId,
+      await apiRequest.post(`/secure/home/book`, {
         ...bookingData
       });
       setBookingSuccess(true);
@@ -40,36 +67,50 @@ const BookingForm = ({ propertyId }) => {
     <form onSubmit={handleBookingSubmit} className={styles.bookingForm}>
       <h2>Rent this property</h2>
       <input
-        type="text"
-        name="name"
-        placeholder="Your Name"
-        value={bookingData.name}
-        onChange={handleBookingChange}
-        required
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Your Email"
-        value={bookingData.email}
-        onChange={handleBookingChange}
-        required
-      />
-      <input
         type="date"
-        name="checkInDate"
+        name="bookedDate"
         placeholder="Check-in Date"
-        value={bookingData.checkInDate}
+        value={bookingData.bookedDate}
         onChange={handleBookingChange}
         required
       />
       <input
         type="date"
-        name="checkOutDate"
+        name="leaveDate"
         placeholder="Check-out Date"
-        value={bookingData.checkOutDate}
+        value={bookingData.leaveDate}
         onChange={handleBookingChange}
         required
+      />
+      <input
+        type="number"
+        name="hostReviewStars"
+        placeholder="Host Review Stars"
+        value={bookingData.hostReviewStars}
+        onChange={handleBookingChange}
+        required
+      />
+      <input
+        type="text"
+        name="hostReviewDescription"
+        placeholder="Host Review Description"
+        value={bookingData.hostReviewDescription}
+        onChange={handleBookingChange}
+      />
+      <input
+        type="number"
+        name="homeReviewStars"
+        placeholder="Home Review Stars"
+        value={bookingData.homeReviewStars}
+        onChange={handleBookingChange}
+        required
+      />
+      <input
+        type="text"
+        name="homeReviewDescription"
+        placeholder="Home Review Description"
+        value={bookingData.homeReviewDescription}
+        onChange={handleBookingChange}
       />
       <button type="submit">Book Now</button>
       {bookingError && <p className={styles.error}>{bookingError}</p>}
