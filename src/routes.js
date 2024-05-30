@@ -10,11 +10,12 @@ import ProfileUpdatePage from './components/Pages/profileUpdatePage/profileUpdat
 import Login from './components/Pages/login/login';
 import Register from './components/Pages/register/register';
 import NewPostPage from "./components/Pages/newPostPage/newPostPage";
-import { listPageLoader, profilePageLoader, singlePageLoader } from "./utils/loaders";
+import { clientProfilePageLoader, userProfileLoader } from "./utils/loaders";
 import { RequireAuth } from './components/Pages/layout/layout';
 import { Layout } from './components/Pages/layout/layout';
 import ConfirmEmail from './components/confirmation/Confirm';
 import BookingForm from './components/bookingForm/BookingForm';
+import UserProfile from './components/Pages/userProfile/userProfile';
 
 const router = createBrowserRouter([
   {
@@ -56,7 +57,12 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <ProfilePage />,
-        loader: profilePageLoader,
+        loader: clientProfilePageLoader,
+      },
+      {
+        path: 'userProfile',
+        element: <UserProfile />,
+        loader: userProfileLoader,
       },
       {
         path: 'profile/update',

@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import apiRequest from "../../utils/apiRequest";
 import styles from "./BookingForm.module.scss";
 import { AuthContext } from "../../context/AuthContext";
 
 const BookingForm = () => {
   const { propertyId } = useParams();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -54,10 +55,11 @@ const BookingForm = () => {
     setBookingSuccess(false);
 
     try {
-      await apiRequest.post(`/secure/home/book`, {
+      await apiRequest.post(`/booking/home/book`, {
         ...bookingData
       });
       setBookingSuccess(true);
+      navigate('/profile');
     } catch (err) {
       setBookingError(err.response.data.message);
     }

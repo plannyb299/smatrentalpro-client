@@ -1,5 +1,6 @@
 import styles from "./Navbar.module.scss";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+
 
 import { BsArrowRight } from "react-icons/bs";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -11,6 +12,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = ({ BurgerColour }) => {
   const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [isNavOpen, setisNavOpen] = useState(false);
   let domNode = useClickOutside(() => {
     setisNavOpen(false);
@@ -27,6 +29,16 @@ const Navbar = ({ BurgerColour }) => {
         </NavLink>
       </li>
     );
+  };
+
+  const handleProfileRedirect = () => {
+    if (currentUser) {
+      if (currentUser.role === 'manager') {
+        navigate('/profile');
+      } else {
+        navigate('/userProfile');
+      }
+    }
   };
 
   return (
@@ -81,10 +93,10 @@ const Navbar = ({ BurgerColour }) => {
               }}
             />
             <span style={{ color: BurgerColour }}>{currentUser.username}</span>
-            <Link to="/profile" className="profile">
+            <span onClick={handleProfileRedirect} className={styles.profile} style={{ cursor: 'pointer' }}>
               <span style={{ color: BurgerColour }}>Profile</span>
               <BsArrowRight style={{ color: BurgerColour }} />
-            </Link>
+            </span>
           </div>
         ) : (
           <>

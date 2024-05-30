@@ -7,15 +7,34 @@ export const singlePageLoader = async ({ request, params }) => {
 };
 export const listPageLoader = async ({ request, params }) => {
   const query = request.url.split("?")[1];
-  const postPromise = apiRequest("/public/homes?" + query);
+  const postPromise = apiRequest("/host/bookedHomes/?" + query);
   return defer({
     postResponse: postPromise,
   });
 };
 
-export const profilePageLoader = async () => {
+
+export const clientProfilePageLoader = async (args) => {
+  const userData = JSON.parse(localStorage.getItem('user'));
+  const userId = userData ? userData.user_id : null;
+  return profilePageLoader({ userId });
+};
+
+export const profilePageLoader = async ({ userId }) => {
+  if (!userId) {
+    throw new Error("User ID is not available");
+  }
+
+  const postPromise = apiRequest(`/host/bookedHomes/${userId}`);
+  console.log(postPromise)
+  return defer({
+    postResponse: postPromise,
+  });
+};
+
+export const userProfileLoader = async ({ request, params }) => {
   const username = localStorage.getItem('refresh_token');
-  const postPromise = apiRequest(`/host/${username}/homes`);
+  const postPromise = apiRequest(`/host/bookedHomes/?userId=${params.id}`);
   const chatPromise = apiRequest("/chats");
   return defer({
     postResponse: postPromise,

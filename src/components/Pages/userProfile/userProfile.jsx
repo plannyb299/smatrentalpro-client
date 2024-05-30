@@ -1,12 +1,12 @@
 
 import List from "../../list/List";
-import "./profilePage.scss";
+import "./userProfile.scss";
 import apiRequest from "../../../utils/apiRequest";
 import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
 import { Suspense, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 
-function ProfilePage() {
+function UserProfile() {
   const data = useLoaderData();
 
   const { updateUser, currentUser } = useContext(AuthContext);
@@ -28,7 +28,7 @@ function ProfilePage() {
         <div className="wrapper">
           <div className="title">
             <h1>User Information</h1>
-            <Link to="/profile/update">
+            <Link to="/profile+/update">
               <button>Update Profile</button>
             </Link>
           </div>
@@ -46,20 +46,6 @@ function ProfilePage() {
             <button onClick={handleLogout}>Logout</button>
           </div>
           <div className="title">
-            <h1>My List</h1>
-            <Link to="newpost">
-              <button>Create New Post</button>
-            </Link>
-          </div>
-          <Suspense fallback={<p>Loading...</p>}>
-            <Await
-              resolve={data.postResponse}
-              errorElement={<p>Error loading posts!</p>}
-            >
-              {(postResponse) => <List posts={postResponse.data} />}
-            </Await>
-          </Suspense>
-          <div className="title">
             <h1>Saved List</h1>
           </div>
           <Suspense fallback={<p>Loading...</p>}>
@@ -76,4 +62,4 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default UserProfile;

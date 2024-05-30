@@ -85,7 +85,7 @@ Card.defaultProps = {
   info: {
     id: undefined,
     imageSource: building3,
-    category: "Buy",
+    category: "Rent",
     city: "City",
     neighbourhood: "Neighbourhood",
     street: "Street",

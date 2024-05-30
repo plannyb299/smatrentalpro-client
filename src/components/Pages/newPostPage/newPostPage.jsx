@@ -71,7 +71,7 @@ function NewPostPage() {
     try {
       console.log(formData);
       const res = await apiRequest.post("/public/home/new", formData);
-      navigate("/" + res.data.id);
+      navigate("property/" + res.data.id);
     } catch (err) {
       console.log(err);
       setError(error);
