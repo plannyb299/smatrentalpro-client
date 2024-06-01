@@ -36,7 +36,7 @@ const Section_3 = () => {
     <section className={styles.section_3}>
       <div className={styles.section_3_title}>
         <h1>Houses Available For Rent</h1>
-        <ArrowButton text="See More" path="buy" />
+        <ArrowButton text="See More" path="rent" />
       </div>
 
       <div className={styles.cards}>

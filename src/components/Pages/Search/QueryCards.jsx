@@ -3,21 +3,23 @@ import SearchContext from "./SearchContext";
 import FilteredCards from "./FilteredCards";
 import { ActionButton } from "../../buttons/Buttons";
 import apiRequest from "../../../utils/apiRequest";
+import { useLocation } from "react-router-dom";
 
 const QueryCards = () => {
-  const { buy, rent, priceFilter } = useContext(SearchContext);
+  const { rent, priceFilter } = useContext(SearchContext);
   const [houses, setHouses] = useState([]);
   const [page, setPage] = useState(2);
   const [fetching, setFetching] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Fetch More");
+  const location = useLocation();
 
   const fetchHouses = async (params) => {
     try {
       const query = new URLSearchParams(params).toString();
-      const response = await apiRequest.post(`/public/homes/more?${query}`);
+      const response = await apiRequest.get(`/public/homeByPriceAndCity?${query}`);
       if (response.status === 200) {
         const data = response.data;
-        return data.houses;
+        return Array.isArray(data) ? data : []; 
       } else {
         console.error(response.data.error);
         return [];
@@ -29,29 +31,12 @@ const QueryCards = () => {
   };
 
   const updateHouses = async () => {
-    let params = {};
-    if (buy && rent) {
-      params = {
-        cat: "",
-        minPrice: parseFloat(priceFilter.minPrice),
-        maxPrice: parseFloat(priceFilter.maxPrice),
-        forRent: 0,
-      };
-    } else if (rent) {
-      params = {
-        cat: "rent",
-      };
-    } else if (buy) {
-      params = {
-        cat: "buy",
-        minPrice: parseFloat(priceFilter.minPrice),
-        maxPrice: parseFloat(priceFilter.maxPrice),
-      };
-    } else {
-      params = {
-        cat: "none",
-      };
-    }
+    const searchParams = new URLSearchParams(location.search);
+    const params = {
+      minPrice: searchParams.get("minPrice") || priceFilter.minPrice.toString(),
+      maxPrice: searchParams.get("maxPrice") || priceFilter.maxPrice.toString(),
+      city: searchParams.get("city") || "", // Ensure the parameter name is 'city'
+    };
     const houses = await fetchHouses(params);
     setHouses(houses);
     setPage(2);
@@ -60,14 +45,15 @@ const QueryCards = () => {
 
   useEffect(() => {
     updateHouses();
-  }, [buy, rent, priceFilter]);
+  }, [rent, priceFilter, location.search]);
 
   const clickHandler = async () => {
     setFetching(true);
+    const searchParams = new URLSearchParams(location.search);
     const params = {
-      cat: buy && rent ? "" : buy ? "buy" : rent ? "rent" : "none",
-      minPrice: buy ? parseFloat(priceFilter.minPrice) : 0,
-      maxPrice: buy ? parseFloat(priceFilter.maxPrice) : 0,
+      minPrice: searchParams.get("minPrice") || priceFilter.minPrice.toString(),
+      maxPrice: searchParams.get("maxPrice") || priceFilter.maxPrice.toString(),
+      city: searchParams.get("city") || "", // Ensure the parameter name is 'city'
       page: page,
     };
     const newHouses = await fetchHouses(params);

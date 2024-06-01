@@ -1,32 +1,18 @@
 import styles from "./Search.module.scss";
 import Navbar from "../../navbar/Navbar";
-import { useState } from "react";
-
+import { useContext } from "react";
 import SearchContext from "./SearchContext";
 import Filters from "./Filters/Filters";
 import QueryCards from "./QueryCards";
 
 const Search = () => {
-  //STATES
-  const [rent, setRent] = useState(false);
-  const [priceFilter, setPriceFilter] = useState({
-    minPrice: 0,
-    maxPrice: 0,
-  });
-
-  //CONTEXT
-  const value = {
-    rent,
-    setRent,
-    priceFilter,
-    setPriceFilter,
-  };
+  const { rent, setRent, priceFilter, setPriceFilter } = useContext(SearchContext);
 
   return (
     <main>
       <Navbar />
       <h1 className={styles.title}>Search</h1>
-      <SearchContext.Provider value={value}>
+      <SearchContext.Provider value={{ rent, setRent, priceFilter, setPriceFilter }}>
         <Filters />
         <QueryCards />
       </SearchContext.Provider>

@@ -10,7 +10,7 @@ import ProfileUpdatePage from './components/Pages/profileUpdatePage/profileUpdat
 import Login from './components/Pages/login/login';
 import Register from './components/Pages/register/register';
 import NewPostPage from "./components/Pages/newPostPage/newPostPage";
-import { clientProfilePageLoader, userProfileLoader } from "./utils/loaders";
+import { clientProfilePageLoader, listPageLoader, userProfileLoader } from "./utils/loaders";
 import { RequireAuth } from './components/Pages/layout/layout';
 import { Layout } from './components/Pages/layout/layout';
 import ConfirmEmail from './components/confirmation/Confirm';
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       { path: 'rent', element: <Rent /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
-      { path: 'search', element: <Search /> },
+      { path: 'search', element: <Search />, loader: listPageLoader },
       { path: 'confirm-email', element: <ConfirmEmail /> },
       {
         path: 'property/:propertyId',

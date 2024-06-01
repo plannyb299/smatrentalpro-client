@@ -7,7 +7,8 @@ export const singlePageLoader = async ({ request, params }) => {
 };
 export const listPageLoader = async ({ request, params }) => {
   const query = request.url.split("?")[1];
-  const postPromise = apiRequest("/host/bookedHomes/?" + query);
+  const postPromise = apiRequest.get("/public/homeByPriceAndCity?" + query);
+  console.log(postPromise);
   return defer({
     postResponse: postPromise,
   });
